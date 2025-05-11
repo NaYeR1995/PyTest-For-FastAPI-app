@@ -4,9 +4,8 @@ from fastapi.testclient import TestClient
 from httpx import AsyncClient
 from httpx._transports.asgi import ASGITransport  # Important!
 from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession, async_sessionmaker
-from sqlalchemy.schema import CreateSchema, DropSchema
 
-from identity_service.DB.models.users import TestUser, User
+from identity_service.DB.models.users import User
 from identity_service.main import app
 from identity_service.DB.database import Base
 from identity_service.DB import get_db
@@ -35,17 +34,6 @@ TestingSessionLocal = async_sessionmaker(
     expire_on_commit=False,
     class_=AsyncSession,
 )
-
-# @pytest.fixture(scope="session", autouse=True)
-# async def setup_test_schema():
-#     """Create and drop test schema at session start/end"""
-#     async with test_engine.begin() as conn:
-#         await conn.execute(CreateSchema(TEST_SCHEMA, if_not_exists=True))
-#         # Create all tables in test schema
-#         await conn.run_sync(Base.metadata.create_all)
-#     yield
-#     async with test_engine.begin() as conn:
-#         await conn.execute(DropSchema(TEST_SCHEMA, cascade=True))
 
 @pytest.fixture
 async def db_session():
@@ -86,33 +74,3 @@ async def async_client(db_session):
         yield client
     
     app.dependency_overrides.clear()
-
-@pytest.fixture
-def use_test_user():
-    """Fixture to ensure TestUser is used and in correct schema"""
-    # Store original User table info
-    original_table = User.__table__
-    
-    # Swap to TestUser
-    User.__table__ = TestUser.__table__
-    User.__table_args__ = {"schema": TEST_SCHEMA}
-    
-    yield
-    
-    # Restore original User
-    User.__table__ = original_table
-    User.__table_args__ = {}
-
-# @pytest.fixture(autouse=True)
-# async def clean_tables(db_session):
-#     """Clean test tables between tests"""
-#     try:
-#         for table in Base.metadata.tables.values():
-#             if table.schema == TEST_SCHEMA:
-#                 await db_session.execute(table.delete())
-#         await db_session.commit()
-#     except Exception as e:
-#         await db_session.rollback()
-#         raise e
-
-
