@@ -1,0 +1,135 @@
+version: '3.8'
+
+services:
+  pg_identity_service:
+    image: postgres:17
+    restart: always
+    ports:
+      - "54361:5432"
+    volumes:
+      - theosumma-identity-db-data:/var/lib/postgresql/data/pgdata
+      - ./init-multiple-dbs.sh:/docker-entrypoint-initdb.d/init-multiple-dbs.sh:ro
+    env_file:
+      - ./identity_service/.env
+    environment:
+      - PGDATA=/var/lib/postgresql/data/pgdata
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_DB=postgres
+
+
+#   postgres_db:
+#     image: postgres:12
+#     restart: always
+#     ports:
+#       - "54331:5432"
+#     volumes:
+#       - theosumma-core-db-data:/var/lib/postgresql/data/pgdata
+#     env_file:
+#       - .env
+#     environment:
+#       - PGDATA=/var/lib/postgresql/data/pgdata
+#       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-${POSTGRES_PASSWORD}}
+#       - POSTGRES_USER=${POSTGRES_USER:-${POSTGRES_USER}}
+#       - POSTGRES_DB=${POSTGRES_DB?Variable not set}
+
+  # pg_core_service:
+  #   image: postgres:17
+  #   restart: always
+  #   ports:
+  #     - "54341:5432"
+  #   volumes:
+  #     - theosumma-core-service-db-data:/var/lib/postgresql/data/pgdata
+  #   env_file:
+  #     - ./core_service/.env
+  #   environment:
+  #     - PGDATA=/var/lib/postgresql/data/pgdata
+  #     - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-${POSTGRES_PASSWORD}}
+  #     - POSTGRES_USER=${POSTGRES_USER:-${POSTGRES_USER}}
+  #     - POSTGRES_DB=${POSTGRES_DB?Variable not set}
+
+  # pg_subscription_service:
+  #   image: postgres:17
+  #   restart: always
+  #   ports:
+  #     - "54381:5432"
+  #   volumes:
+  #     - theosumma-subscription-service-db-data:/var/lib/postgresql/data/pgdata
+  #   env_file:
+  #     - ./subscription_service/.env
+  #   environment:
+  #     - PGDATA=/var/lib/postgresql/data/pgdata
+  #     - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-${POSTGRES_PASSWORD}}
+  #     - POSTGRES_USER=${POSTGRES_USER:-${POSTGRES_USER}}
+  #     - POSTGRES_DB=${POSTGRES_DB?Variable not set}
+
+  # pg_pdf_chatting_service:
+  #   image: postgres:17
+  #   restart: always
+  #   ports:
+  #     - "54371:5432"
+  #   volumes:
+  #     - theosumma-pdf-chatting-service-db-data:/var/lib/postgresql/data/pgdata
+  #   env_file:
+  #     - ./pdf_chatting_service/.env
+  #   environment:
+  #     - PGDATA=/var/lib/postgresql/data/pgdata
+  #     - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-${POSTGRES_PASSWORD}}
+  #     - POSTGRES_USER=${POSTGRES_USER:-${POSTGRES_USER}}
+  #     - POSTGRES_DB=${POSTGRES_DB?Variable not set}
+
+  # pg_community_service:
+  #   image: postgres:17
+  #   restart: always
+  #   ports:
+  #     - "54311:5432"
+  #   volumes:
+  #     - theosumma-community-service-db-data:/var/lib/postgresql/data/pgdata
+  #   env_file:
+  #     - ./community_service/.env
+  #   environment:
+  #     - PGDATA=/var/lib/postgresql/data/pgdata
+  #     - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-${POSTGRES_PASSWORD}}
+  #     - POSTGRES_USER=${POSTGRES_USER:-${POSTGRES_USER}}
+  #     - POSTGRES_DB=${POSTGRES_DB?Variable not set}
+
+  # pg_notifications_service:
+  #   image: postgres:17
+  #   restart: always
+  #   ports:
+  #     - "54401:5432"
+  #   volumes:
+  #     - theosumma-notifications-service-db-data:/var/lib/postgresql/data/pgdata
+  #   env_file:
+  #     - ./notification_service/.env
+  #   environment:
+  #     - PGDATA=/var/lib/postgresql/data/pgdata
+  #     - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-${POSTGRES_PASSWORD}}
+  #     - POSTGRES_USER=${POSTGRES_USER:-${POSTGRES_USER}}
+  #     - POSTGRES_DB=${POSTGRES_DB?Variable not set}
+
+  # pg_bible_service:
+  #   image: postgres:17
+  #   restart: always
+  #   ports:
+  #     - "54351:5432"
+  #   volumes:
+  #     - theosumma-bible-service-db-data:/var/lib/postgresql/data/pgdata
+  #   env_file:
+  #     - ./bible_service/.env
+  #   environment:
+  #     - PGDATA=/var/lib/postgresql/data/pgdata
+  #     - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-${POSTGRES_PASSWORD}}
+  #     - POSTGRES_USER=${POSTGRES_USER:-${POSTGRES_USER}}
+  #     - POSTGRES_DB=${POSTGRES_DB?Variable not set}
+
+
+volumes:
+  theosumma-core-db-data:
+  theosumma-core-service-db-data:
+  theosumma-subscription-service-db-data:
+  theosumma-identity-db-data:
+  theosumma-pdf-chatting-service-db-data:
+  theosumma-community-service-db-data:
+  theosumma-notifications-service-db-data:
+  theosumma-bible-service-db-data:
